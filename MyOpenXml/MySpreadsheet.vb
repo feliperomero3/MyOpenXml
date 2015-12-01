@@ -5,6 +5,7 @@ Imports DocumentFormat.OpenXml.Spreadsheet
 ' https://msdn.microsoft.com/EN-US/library/office/ff478153.aspx?cs-save-lang=1&cs-lang=vb
 
 Public Class MySpreadsheet
+
     Private _dataTable As DataTable
     Private _spreadSheetDocument As SpreadsheetDocument
     Private _workbookPart As WorkbookPart
@@ -57,4 +58,5 @@ Public Class MySpreadsheet
             Create()
         End If
     End Sub
+
 End Class
