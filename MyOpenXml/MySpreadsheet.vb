@@ -67,14 +67,15 @@ Public Class MySpreadsheet
 
         _sheets.Append(_sheet)
 
-        _workbookPart.Workbook.Save()
+        ' By default, AutoSave = true
+        '_workbookPart.Workbook.Save()
 
         _spreadSheetDocument.Close()
     End Sub
 
     Public Sub Write(text As String)
         If Not String.IsNullOrWhiteSpace(text) Then
-            Write(text)
+            Write(text, "A", 1)
         Else
             Throw New ArgumentException("Nothing to write.")
         End If
@@ -89,7 +90,7 @@ Public Class MySpreadsheet
         End If
     End Sub
 
-    Private Sub Write(text As String, Optional column As String = "A", Optional row As Integer = 1)
+    Private Sub Write(text As String, column As String, row As Integer)
         Try
             ' Open the document for editing.
             _spreadSheetDocument = SpreadsheetDocument.Open(FilePath, True)
@@ -154,7 +155,7 @@ Public Class MySpreadsheet
         Return i
     End Function
 
-    Private Function InsertCellInWorksheet(columnName As String, rowIndex As Integer, worksheetPart As WorksheetPart) As Cell
+    Private Function InsertCellInWorksheet(columnName As String, rowIndex As Integer, ByRef worksheetPart As WorksheetPart) As Cell
         Dim worksheet As Worksheet = worksheetPart.Worksheet
         Dim sheetData As SheetData = worksheet.GetFirstChild(Of SheetData)()
         Dim cellReference As String = (columnName + rowIndex.ToString())

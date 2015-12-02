@@ -43,12 +43,16 @@ Public Class MySpreadsheetTest
         spreadSheet.Create(filePath)
     End Sub
 
+    Public Sub EmptyTextInputShouldThrowArgumentException()
+
+    End Sub
+
     <TestMethod()>
     Public Sub WriteTextToSpreadsheet()
         Dim filePath = "c:\Users\Public\Documents\WriteTextToSpreadsheet.xlsx"
         Dim spreadSheet = New MySpreadsheet()
         spreadSheet.Create(filePath)
-        spreadSheet.Write("A1")
+        spreadSheet.Write("SampleText")
 
     End Sub
 
