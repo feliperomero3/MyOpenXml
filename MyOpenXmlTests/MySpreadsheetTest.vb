@@ -13,30 +13,43 @@ Public Class MySpreadsheetTest
     End Sub
 
     <TestMethod()>
-    Public Sub DontCreateIfFilePathIsInvalid()
-        Dim filePath = "c:\\\Users\Public\Documents\Libro2.xlsx"
+    <ExpectedException(GetType(DirectoryNotFoundException))>
+    Public Sub InvalidFilePathShouldThrowException()
+        Dim filePath = "Users\Public\Documents\Libro2.xlsx"
         Dim spreadSheet = New MySpreadsheet()
         spreadSheet.Create(filePath)
-        Assert.IsTrue(File.Exists(filePath))
-        'Dim isValidFilePath = Directory.Exists(Path.GetDirectoryName(filePath))
-
     End Sub
 
     <TestMethod()>
     Public Sub DontCreateIfFileExtensionIsInvalid()
-        Dim filePath = "c:\\Users\Public\Documents\Libro3"
+        Dim filePath = "c:\Users\Public\Documents\Libro3"
         Dim fileName = Path.GetFileName(filePath)
         Dim spreadSheet = New MySpreadsheet()
-        spreadSheet.Create(filePath)
-        Assert.IsFalse(File.Exists(filePath), "fileName is:" & fileName)
+        Try
+            spreadSheet.Create(filePath)
+        Catch ex As ArgumentException
+            Assert.IsFalse(File.Exists(filePath), "fileName: " & fileName)
+            Return
+        End Try
+
+        Assert.Fail("No exception was thrown")
     End Sub
 
     <TestMethod()>
     <ExpectedException(GetType(DirectoryNotFoundException))>
     Public Sub InvalidFileNameShouldThrowException()
-        Dim filePath = "c:\\Users\Public\Documents\"
+        Dim filePath = "c:\Users\Public\Documents\"
         Dim spreadSheet = New MySpreadsheet()
         spreadSheet.Create(filePath)
+    End Sub
+
+    <TestMethod()>
+    Public Sub WriteTextToSpreadsheet()
+        Dim filePath = "c:\Users\Public\Documents\WriteTextToSpreadsheet.xlsx"
+        Dim spreadSheet = New MySpreadsheet()
+        spreadSheet.Create(filePath)
+        spreadSheet.Write("A1")
+
     End Sub
 
 End Class
