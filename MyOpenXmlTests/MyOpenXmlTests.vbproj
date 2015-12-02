@@ -116,6 +116,12 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyOpenXml\MyOpenXml.vbproj">
+      <Project>{0134ed46-e490-4274-ad20-86282ad7fdf0}</Project>
+      <Name>MyOpenXml</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
