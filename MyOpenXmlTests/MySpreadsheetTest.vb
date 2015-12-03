@@ -80,12 +80,21 @@ Public Class MySpreadsheetTest
     <TestMethod()>
     Public Sub WriteDatabaseDataToSpreadsheet()
         Dim dataTable = New DataTable("Products")
+
+        Dim type = GetType(Product)
+        Dim propertiesInfo = type.GetProperties()
+
+        For Each propertyInfo In propertiesInfo
+            dataTable.Columns.Add(propertyInfo.Name)
+        Next
+
         Using db As New AdventureWorks2014()
-            Dim result = db.Product.AsQueryable()
+            Dim result = db.Product.AsEnumerable()
             For Each p As Product In result
                 dataTable.Rows.Add(p)
             Next
         End Using
+
         Dim filePath = "c:\Users\Public\Documents\WriteDatabaseDataToSpreadsheet.xlsx"
         Dim spreadSheet = New MySpreadsheet()
         spreadSheet.Create(filePath)
