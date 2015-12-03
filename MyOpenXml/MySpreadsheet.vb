@@ -83,8 +83,22 @@ Public Class MySpreadsheet
 
     Public Sub Write(dataTable As DataTable)
         If dataTable.Rows.Count > 0 Then
-            ' Iterar sobre las celdas del dataTable
+            Dim index = 0
+            Dim spreadsheetColumns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            For Each col As DataColumn In dataTable.Columns
+                Write(col.ColumnName, spreadsheetColumns(index), 1)
+                index += 1
+            Next
+            index = 0
 
+            For i As Integer = 0 To dataTable.Rows.Count - 1 Step 1
+                For j As Integer = 0 To dataTable.Columns.Count - 1 Step 1
+                    Write(dataTable.Rows(i)(dataTable.Columns(j)),
+                          spreadsheetColumns(index), i + 2)
+                    index += 1
+                Next
+                index = 0
+            Next
         Else
             Throw New ArgumentException("Nothing to write.")
         End If
@@ -155,6 +169,9 @@ Public Class MySpreadsheet
         Return i
     End Function
 
+
+    ' Given a column name, a row index, and a WorksheetPart, inserts a cell into the worksheet. 
+    ' If the cell already exists, return it. 
     Private Function InsertCellInWorksheet(columnName As String, rowIndex As Integer, ByRef worksheetPart As WorksheetPart) As Cell
         Dim worksheet As Worksheet = worksheetPart.Worksheet
         Dim sheetData As SheetData = worksheet.GetFirstChild(Of SheetData)()

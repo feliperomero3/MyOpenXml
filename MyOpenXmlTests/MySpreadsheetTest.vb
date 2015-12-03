@@ -56,4 +56,24 @@ Public Class MySpreadsheetTest
 
     End Sub
 
+    <TestMethod()>
+    Public Sub WriteDataTableToSpreadsheet()
+        Dim dataTable = New DataTable("SampleDataTable")
+        dataTable.Columns.Add("Id")
+        dataTable.Columns.Add("Artist")
+        dataTable.Columns.Add("Album")
+        dataTable.Columns.Add("Genre")
+        dataTable.Columns.Add("Year")
+        dataTable.Rows.Add(New [Object]() {"1", "Metallica", "Kill 'Em All", "Metal", "1983"})
+        dataTable.Rows.Add(New [Object]() {"2", "Finch", "What It Is to Burn", "Alternative", "2002"})
+        dataTable.Rows.Add(New [Object]() {"3", "A Perfect Circle", "Thirteenth Step", "Alternative", "2003"})
+        dataTable.Rows.Add(New [Object]() {"4", "Coldplay", "Parachutes", "Alternative", "2000"})
+        dataTable.Rows.Add(New [Object]() {"5", "Héroes del Silencio", "Avalancha", "Alternativo & Rock Latino", "1995"})
+        dataTable.Rows.Add(New [Object]() {"6", "British India", "Controller", "Alternative", "2013"})
+        Dim filePath = "c:\Users\Public\Documents\WriteDataTableToSpreadsheet.xlsx"
+        Dim spreadSheet = New MySpreadsheet()
+        spreadSheet.Create(filePath)
+        spreadSheet.Write(dataTable)
+    End Sub
+
 End Class
