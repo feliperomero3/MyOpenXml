@@ -7,6 +7,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MyOpenXml", "MyOpenXml\MyOp
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "MyOpenXmlTests", "MyOpenXmlTests\MyOpenXmlTests.vbproj", "{400FD0EC-56A0-4623-B2C7-3A7FBAED790E}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Entities", "Entities\Entities.vbproj", "{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{400FD0EC-56A0-4623-B2C7-3A7FBAED790E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{400FD0EC-56A0-4623-B2C7-3A7FBAED790E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{400FD0EC-56A0-4623-B2C7-3A7FBAED790E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
