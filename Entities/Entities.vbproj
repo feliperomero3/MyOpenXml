@@ -54,6 +54,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -71,7 +73,27 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.vb" />
+    <Compile Include="Address.vb">
+      <DependentUpon>AdventureWorks2014Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AdventureWorks2014Model.Context.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdventureWorks2014Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AdventureWorks2014Model.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdventureWorks2014Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="AdventureWorks2014Model.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdventureWorks2014Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContactType.vb">
+      <DependentUpon>AdventureWorks2014Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -87,6 +109,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Product.vb">
+      <DependentUpon>AdventureWorks2014Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SalesOrderDetail.vb">
+      <DependentUpon>AdventureWorks2014Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SalesOrderHeader.vb">
+      <DependentUpon>AdventureWorks2014Model.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -97,6 +128,23 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="AdventureWorks2014Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AdventureWorks2014Model.Designer.vb</LastGenOutput>
+    </EntityDeploy>
+    <None Include="AdventureWorks2014Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AdventureWorks2014Model.edmx</DependentUpon>
+      <LastGenOutput>AdventureWorks2014Model.Context.vb</LastGenOutput>
+    </None>
+    <None Include="AdventureWorks2014Model.edmx.diagram">
+      <DependentUpon>AdventureWorks2014Model.edmx</DependentUpon>
+    </None>
+    <None Include="AdventureWorks2014Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AdventureWorks2014Model.edmx</DependentUpon>
+      <LastGenOutput>AdventureWorks2014Model.vb</LastGenOutput>
+    </None>
     <None Include="App.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -108,6 +156,9 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
