@@ -1,5 +1,6 @@
 ﻿Imports MyOpenXml
 Imports System.IO
+Imports Entities
 
 <TestClass()>
 Public Class MySpreadsheetTest
@@ -71,6 +72,21 @@ Public Class MySpreadsheetTest
         dataTable.Rows.Add(New [Object]() {"5", "Héroes del Silencio", "Avalancha", "Alternativo & Rock Latino", "1995"})
         dataTable.Rows.Add(New [Object]() {"6", "British India", "Controller", "Alternative", "2013"})
         Dim filePath = "c:\Users\Public\Documents\WriteDataTableToSpreadsheet.xlsx"
+        Dim spreadSheet = New MySpreadsheet()
+        spreadSheet.Create(filePath)
+        spreadSheet.Write(dataTable)
+    End Sub
+
+    <TestMethod()>
+    Public Sub WriteDatabaseDataToSpreadsheet()
+        Dim dataTable = New DataTable("Products")
+        Using db As New AdventureWorks2014()
+            Dim result = db.Product.AsQueryable()
+            For Each p As Product In result
+                dataTable.Rows.Add(p)
+            Next
+        End Using
+        Dim filePath = "c:\Users\Public\Documents\WriteDatabaseDataToSpreadsheet.xlsx"
         Dim spreadSheet = New MySpreadsheet()
         spreadSheet.Create(filePath)
         spreadSheet.Write(dataTable)
