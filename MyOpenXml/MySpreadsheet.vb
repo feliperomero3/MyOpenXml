@@ -73,6 +73,15 @@ Public Class MySpreadsheet
         _spreadSheetDocument.Close()
     End Sub
 
+    Private Sub Open()
+        ' Open the document for editing.
+        _spreadSheetDocument = SpreadsheetDocument.Open(FilePath, True)
+    End Sub
+
+    Private Sub Close()
+        _spreadSheetDocument.Close()
+    End Sub
+
     Public Sub Write(text As String)
         If Not String.IsNullOrWhiteSpace(text) Then
             Write(text, "A", 1)
@@ -82,47 +91,54 @@ Public Class MySpreadsheet
     End Sub
 
     Public Sub Write(dataTable As DataTable)
-        If dataTable.Rows.Count > 0 Then
-            Dim index = 0
+        If dataTable.Columns.Count > 0 Then
+            Try
+                ' Open the document for editing.
+                Open()
+            Catch ex As DirectoryNotFoundException
+                Throw
+            End Try
+
+            Dim index = 1
             Dim text As Object = String.Empty
             For Each col As DataColumn In dataTable.Columns
-                Write(col.ColumnName, GetColumnName(index + 1), row:=1)
+                Write(col.ColumnName, GetColumnName(index), row:=1)
                 index += 1
             Next
-            index = 0
 
-            For i As Integer = 0 To dataTable.Rows.Count - 1 Step 1
-                For j As Integer = 0 To dataTable.Columns.Count - 1 Step 1
+            index = 1
+
+            For i As Integer = 0 To dataTable.Rows.Count - 1
+                For j As Integer = 0 To dataTable.Columns.Count - 1
                     text = dataTable.Rows(i)(dataTable.Columns(j))
-                    text = If(IsDBNull(text), String.Empty, text) ' Explicit or implicit conversion?
-                    Write(text.ToString(), GetColumnName(index + 1), i + 2)
+                    text = If(IsDBNull(text), "NULL", text) ' Explicit or implicit conversion?
+                    Write(text, GetColumnName(index), i + 2)
                     index += 1
                 Next
-                index = 0
+                index = 1
             Next
+
+            ' Close the document.
+            Close()
         Else
             Throw New ArgumentException("Nothing to write.")
         End If
     End Sub
 
     Private Sub Write(text As String, column As String, row As Integer)
-        Try
-            ' Open the document for editing.
-            _spreadSheetDocument = SpreadsheetDocument.Open(FilePath, True)
-
-        Catch ex As DirectoryNotFoundException
-            Throw
-        End Try
+        If _spreadSheetDocument Is Nothing Then
+            Throw New IOException("Could not write to file. Open the file first.")
+        End If
 
         ' Get the SharedStringTablePart. If it does not exist, create a new one.
         Dim shareStringPart As SharedStringTablePart
 
         If (_spreadSheetDocument.WorkbookPart.GetPartsOfType(Of SharedStringTablePart).Count() > 0) Then
             shareStringPart = _spreadSheetDocument.WorkbookPart.
-                GetPartsOfType(Of SharedStringTablePart).First()
+                    GetPartsOfType(Of SharedStringTablePart).First()
         Else
             shareStringPart = _spreadSheetDocument.WorkbookPart.
-                AddNewPart(Of SharedStringTablePart)()
+                    AddNewPart(Of SharedStringTablePart)()
         End If
 
         ' Insert the text into the SharedStringTablePart.
@@ -139,10 +155,7 @@ Public Class MySpreadsheet
         cell.DataType = New EnumValue(Of CellValues)(CellValues.SharedString)
 
         ' Save the new worksheet.
-        _worksheetPart.Worksheet.Save()
-
-        _spreadSheetDocument.Close()
-
+        _worksheetPart.Worksheet.Save() ' REFAC comentar?
     End Sub
 
     ' Given text and a SharedStringTablePart, creates a SharedStringItem with the specified text 
@@ -195,7 +208,8 @@ Public Class MySpreadsheet
             ' Cells must be in sequential order according to CellReference. Determine where to insert the new cell.
             Dim refCell As Cell = Nothing
             For Each cell As Cell In row.Elements(Of Cell)()
-                If (String.Compare(cell.CellReference.Value, cellReference, True) > 0) Then
+                'If (String.Compare(cell.CellReference.Value, cellReference, True) > 0) Then
+                If (GetColumnNumber(cell.CellReference.Value) > GetColumnNumber(cellReference)) Then
                     refCell = cell
                     Exit For
                 End If
@@ -211,20 +225,37 @@ Public Class MySpreadsheet
         End If
     End Function
 
-
     ' Get Excel column name (e.g. AA) from a column number (e.g. 27)
     Public Function GetColumnName(columnNumber As Integer) As String
-        Dim dividend = columnNumber
         Dim columnName = String.Empty
-        Dim modulo = 0
+        If columnNumber > 0 Then
+            Dim dividend = columnNumber
+            Dim modulo = 0
 
-        While dividend > 0
-            modulo = (dividend - 1) Mod 26
-            columnName = Convert.ToChar(65 + modulo).ToString() + columnName
-            dividend = CInt((dividend - modulo) / 26)
-        End While
-
-        Return columnName
+            While dividend > 0
+                modulo = (dividend - 1) Mod 26
+                columnName = Convert.ToChar(65 + modulo).ToString() + columnName
+                dividend = CInt((dividend - modulo) / 26)
+            End While
+            Return columnName
+        End If
+        Return "Undefined"
     End Function
 
+    ' Get column number (e.g. 27) from Excel column name (e.g. AA)
+    Public Function GetColumnNumber(columnName As String) As Integer
+        Dim columnIndex = 0
+        If Not String.IsNullOrEmpty(columnName) Then
+            Dim index = 0
+            Dim power = columnName.Length - 1
+
+            While index < columnName.Count()
+                Dim columnValue = Convert.ToInt32(columnName(index)) - 64
+                columnIndex += columnValue * CInt(System.Math.Pow(26, power))
+                index += 1
+                power -= 1
+            End While
+        End If
+        Return columnIndex
+    End Function
 End Class
