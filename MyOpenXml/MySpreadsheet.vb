@@ -87,7 +87,7 @@ Public Class MySpreadsheet
             Dim text As Object = String.Empty
             Dim spreadsheetColumns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             For Each col As DataColumn In dataTable.Columns
-                Write(col.ColumnName, spreadsheetColumns(index), 1)
+                Write(col.ColumnName, spreadsheetColumns(index), row:=1)
                 index += 1
             Next
             index = 0
@@ -210,6 +210,22 @@ Public Class MySpreadsheet
 
             Return newCell
         End If
+    End Function
+
+
+    ' Get Excel column name (e.g. AA) from a column number (e.g. 27)
+    Public Function GetColumnName(columnNumber As Integer) As String
+        Dim dividend = columnNumber
+        Dim columnName = String.Empty
+        Dim modulo = 0
+
+        While dividend > 0
+            modulo = (dividend - 1) Mod 26
+            columnName = Convert.ToChar(65 + modulo).ToString() + columnName
+            dividend = CInt((dividend - modulo) / 26)
+        End While
+
+        Return columnName
     End Function
 
 End Class
