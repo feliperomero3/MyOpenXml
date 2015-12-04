@@ -83,15 +83,23 @@ Public Class MySpreadsheetTest
 
         Dim type = GetType(Product)
         Dim propertiesInfo = type.GetProperties()
+        Debug.Print("propertiesInfo: " & propertiesInfo.Count())
 
         For Each propertyInfo In propertiesInfo
             dataTable.Columns.Add(propertyInfo.Name)
         Next
 
+        Dim productAsArray As Object() = Nothing
+
         Using db As New AdventureWorks2014()
-            Dim result = db.Product.AsEnumerable()
+            Dim result = db.Product.Take(1).AsEnumerable()
             For Each p As Product In result
-                dataTable.Rows.Add(p)
+                productAsArray = GetProductValuesAsArray(p)
+                For Each obj In productAsArray
+                    Debug.Print("GetProductAsArray(p): " & _
+                                If(obj IsNot Nothing, obj.ToString(), "NULL"))
+                Next
+                dataTable.Rows.Add(productAsArray)
             Next
         End Using
 
@@ -100,5 +108,100 @@ Public Class MySpreadsheetTest
         spreadSheet.Create(filePath)
         spreadSheet.Write(dataTable)
     End Sub
+
+    <TestMethod()>
+    Public Sub WriteDatabaseTableColumnsToSpreadsheet()
+        Dim dataTable = New DataTable("Products")
+
+        Dim type = GetType(Product)
+        Dim propertiesInfo = type.GetProperties()
+        Debug.Print("propertiesInfo: " & propertiesInfo.Count())
+
+        For Each propertyInfo In propertiesInfo
+            dataTable.Columns.Add(propertyInfo.Name)
+        Next
+
+        Dim filePath = "c:\Users\Public\Documents\WriteDataBaseTableColumnsToSpreadsheet.xlsx"
+        Dim spreadSheet = New MySpreadsheet()
+        spreadSheet.Create(filePath)
+        spreadSheet.Write(dataTable)
+    End Sub
+
+    <TestMethod()>
+    Public Sub GetColumnNameFromColumnNumber()
+        Dim spreadsheet = New MySpreadsheet()
+        Dim columnNumbers = {0, 1, 5, 27, 127}
+        Dim columnName = String.Empty
+        Dim message = String.Empty
+        For Each number As Integer In columnNumbers
+            columnName = spreadsheet.GetColumnName(number)
+            message = "Column number {0} equals column name {1}"
+            message = String.Format(message, number, columnName)
+            Debug.Print(message)
+        Next
+        ' REFAC usar Assert.Equal para comparar con nombres de columna esperados.
+    End Sub
+
+    <TestMethod()>
+    Public Sub GetColumnNumberFromColumnName()
+        Dim spreadsheet = New MySpreadsheet()
+        Dim columnNames = {"", "A", "E", "AA", "DW"}
+        Dim columnNumber = 0
+        Dim message = String.Empty
+        For Each name As String In columnNames
+            columnNumber = spreadsheet.GetColumnNumber(name)
+            message = "Column name {0} equals column number {1}"
+            message = String.Format(message, name, columnNumber)
+            Debug.Print(message)
+        Next
+        ' REFAC usar Assert.Equal para comparar con los numeros de columna esperados.
+
+    End Sub
+
+    ' Helper Methods
+
+    Private Function GetProductPropertiesAsArray(product As Product)
+
+
+
+
+
+        Return 0
+    End Function
+
+    Private Function GetProductValuesAsArray(product As Product) As Object()
+        Dim type = product.GetType()
+        Dim propertiesInfo = type.GetProperties()
+        Dim array As Object() = New Object(propertiesInfo.GetUpperBound(0)) {}
+
+        For index = 0 To array.GetUpperBound(0)
+            array(index) = propertiesInfo(index).GetValue(product)
+        Next
+
+        Return array
+    End Function
+
+    Private Function GetProductAsKeyValuePairArray(product As Product) As Object()
+        Dim type = product.GetType()
+        Dim propertiesInfo = type.GetProperties()
+        Dim array As Object() = New Object(propertiesInfo.GetUpperBound(0)) {}
+        Dim keyValuePair = String.Empty
+
+        For index = 0 To array.GetUpperBound(0)
+            keyValuePair = "{0} -> {1}"
+            array(index) = String.Format(keyValuePair, propertiesInfo(index).Name,
+                                         propertiesInfo(index).GetValue(product))
+        Next
+
+        Return array
+    End Function
+
+    Private Function GetCustomObjectPropertiesValuesAsArray(customObject As Object)
+        Dim type = GetType(Object)
+        Dim array As Object() = New Object(10) {}
+
+
+        Return 0
+    End Function
 
 End Class
