@@ -85,9 +85,8 @@ Public Class MySpreadsheet
         If dataTable.Rows.Count > 0 Then
             Dim index = 0
             Dim text As Object = String.Empty
-            Dim spreadsheetColumns = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             For Each col As DataColumn In dataTable.Columns
-                Write(col.ColumnName, spreadsheetColumns(index), row:=1)
+                Write(col.ColumnName, GetColumnName(index + 1), row:=1)
                 index += 1
             Next
             index = 0
@@ -96,7 +95,7 @@ Public Class MySpreadsheet
                 For j As Integer = 0 To dataTable.Columns.Count - 1 Step 1
                     text = dataTable.Rows(i)(dataTable.Columns(j))
                     text = If(IsDBNull(text), String.Empty, text) ' Explicit or implicit conversion?
-                    Write(text.ToString(), spreadsheetColumns(index), i + 2)
+                    Write(text.ToString(), GetColumnName(index + 1), i + 2)
                     index += 1
                 Next
                 index = 0
