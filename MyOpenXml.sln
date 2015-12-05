@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C. SpreadsheetLightProjects
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "A. Data", "A. Data", "{8A21D38E-4335-46E7-91D7-F4B7A4155893}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SpreadsheetLightSample", "SpreadsheetLightSample\SpreadsheetLightSample.vbproj", "{36904817-CBB3-4171-94EE-C0F313FFFB37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36904817-CBB3-4171-94EE-C0F313FFFB37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36904817-CBB3-4171-94EE-C0F313FFFB37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36904817-CBB3-4171-94EE-C0F313FFFB37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36904817-CBB3-4171-94EE-C0F313FFFB37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,5 +47,6 @@ Global
 		{0134ED46-E490-4274-AD20-86282AD7FDF0} = {EEA0AC8E-D169-4282-9397-B75205D78573}
 		{400FD0EC-56A0-4623-B2C7-3A7FBAED790E} = {EEA0AC8E-D169-4282-9397-B75205D78573}
 		{CE00A18B-37B5-4EDC-8F9C-267597A2D7E1} = {8A21D38E-4335-46E7-91D7-F4B7A4155893}
+		{36904817-CBB3-4171-94EE-C0F313FFFB37} = {7125CB9A-2C28-453F-A7CE-AB865DAC3FF6}
 	EndGlobalSection
 EndGlobal
