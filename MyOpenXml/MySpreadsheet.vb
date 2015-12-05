@@ -30,7 +30,7 @@ Public Class MySpreadsheet
                 FilePath = newFilePath
                 Create()
             Else
-                Throw New ArgumentException("Invalid file extension: " & fileExtension)
+                Throw New ArgumentException("Invalid filename: " & newFilePath)
             End If
         End If
     End Sub
@@ -74,17 +74,24 @@ Public Class MySpreadsheet
     End Sub
 
     Private Sub Open()
-        ' Open the document for editing.
-        _spreadSheetDocument = SpreadsheetDocument.Open(FilePath, True)
+        Try
+            ' Open the document for editing.
+            _spreadSheetDocument = SpreadsheetDocument.Open(FilePath, True)
+        Catch ex As DirectoryNotFoundException
+            Throw
+        End Try
     End Sub
 
     Private Sub Close()
+        _worksheetPart.Worksheet.Save()
         _spreadSheetDocument.Close()
     End Sub
 
     Public Sub Write(text As String)
         If Not String.IsNullOrWhiteSpace(text) Then
+            Open()
             Write(text, "A", 1)
+            Close()
         Else
             Throw New ArgumentException("Nothing to write.")
         End If
@@ -92,12 +99,8 @@ Public Class MySpreadsheet
 
     Public Sub Write(dataTable As DataTable)
         If dataTable.Columns.Count > 0 Then
-            Try
-                ' Open the document for editing.
-                Open()
-            Catch ex As DirectoryNotFoundException
-                Throw
-            End Try
+            ' Open the document for editing.
+            Open()
 
             Dim index = 1
             Dim text As Object = String.Empty
@@ -111,7 +114,7 @@ Public Class MySpreadsheet
             For i As Integer = 0 To dataTable.Rows.Count - 1
                 For j As Integer = 0 To dataTable.Columns.Count - 1
                     text = dataTable.Rows(i)(dataTable.Columns(j))
-                    text = If(IsDBNull(text), "NULL", text) ' Explicit or implicit conversion?
+                    text = If(IsDBNull(text), "NULL", text)
                     Write(text, GetColumnName(index), i + 2)
                     index += 1
                 Next
@@ -155,7 +158,7 @@ Public Class MySpreadsheet
         cell.DataType = New EnumValue(Of CellValues)(CellValues.SharedString)
 
         ' Save the new worksheet.
-        _worksheetPart.Worksheet.Save() ' REFAC comentar?
+        '_worksheetPart.Worksheet.Save()
     End Sub
 
     ' Given text and a SharedStringTablePart, creates a SharedStringItem with the specified text 
@@ -208,7 +211,7 @@ Public Class MySpreadsheet
             ' Cells must be in sequential order according to CellReference. Determine where to insert the new cell.
             Dim refCell As Cell = Nothing
             For Each cell As Cell In row.Elements(Of Cell)()
-                'If (String.Compare(cell.CellReference.Value, cellReference, True) > 0) Then
+                'If (String.Compare(cell.CellReference.Value, cellReference, True) > 0) Then ' Fails when columnNumber > 25 "AA1"
                 If (GetColumnNumber(cell.CellReference.Value) > GetColumnNumber(cellReference)) Then
                     refCell = cell
                     Exit For

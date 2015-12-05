@@ -37,7 +37,7 @@ Public Class MySpreadsheetTest
     End Sub
 
     <TestMethod()>
-    <ExpectedException(GetType(DirectoryNotFoundException))>
+    <ExpectedException(GetType(ArgumentException))>
     Public Sub InvalidFileNameShouldThrowException()
         Dim filePath = "c:\Users\Public\Documents\"
         Dim spreadSheet = New MySpreadsheet()
@@ -83,7 +83,7 @@ Public Class MySpreadsheetTest
 
         Dim type = GetType(Product)
         Dim propertiesInfo = type.GetProperties()
-        Debug.Print("propertiesInfo: " & propertiesInfo.Count())
+        'Debug.Print("propertiesInfo: " & propertiesInfo.Count())
 
         For Each propertyInfo In propertiesInfo
             dataTable.Columns.Add(propertyInfo.Name)
@@ -92,7 +92,8 @@ Public Class MySpreadsheetTest
         Dim productAsArray As Object() = Nothing
 
         Using db As New AdventureWorks2014()
-            Dim result = db.Product.Take(1).AsEnumerable()
+            Dim result = db.Product.Take(100).ToList()
+            'Dim result = db.Product.SqlQuery("SELECT TOP 100 * FROM Production.Product")
             For Each p As Product In result
                 productAsArray = GetProductValuesAsArray(p)
                 For Each obj In productAsArray
@@ -157,6 +158,11 @@ Public Class MySpreadsheetTest
         ' REFAC usar Assert.Equal para comparar con los numeros de columna esperados.
 
     End Sub
+
+    ' Probar métodos anteriores con cargas intensas como 25*100 (25 columnas * 100 filas)
+    ' que sería el número de veces que sería llamado, esto con el objetivo de determinar
+    ' cuanto peso tiene este método [GetColumnNameFromColumnNumber()] 
+    ' en el tiempo que demora la exportación.
 
     ' Helper Methods
 
