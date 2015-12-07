@@ -58,7 +58,7 @@ Public Class MySpreadsheetTest
     End Sub
 
     <TestMethod()>
-    Public Sub WriteDataTableToSpreadsheet()
+    Public Sub ExportDataTableToSpreadsheet()
         Dim dataTable = New DataTable("SampleDataTable")
         dataTable.Columns.Add("Id")
         dataTable.Columns.Add("Artist")
@@ -78,7 +78,7 @@ Public Class MySpreadsheetTest
     End Sub
 
     <TestMethod()>
-    Public Sub WriteDatabaseDataToSpreadsheet()
+    Public Sub ExportDatabaseDataToSpreadsheet()
         Dim dataTable = New DataTable("Products")
 
         Dim type = GetType(Product)
@@ -111,7 +111,7 @@ Public Class MySpreadsheetTest
     End Sub
 
     <TestMethod()>
-    Public Sub WriteDatabaseTableColumnsToSpreadsheet()
+    Public Sub ExportDatabaseTableColumnsToSpreadsheet()
         Dim dataTable = New DataTable("Products")
 
         Dim type = GetType(Product)
@@ -165,16 +165,6 @@ Public Class MySpreadsheetTest
     ' en el tiempo que demora la exportación.
 
     ' Helper Methods
-
-    Private Function GetProductPropertiesAsArray(product As Product)
-
-
-
-
-
-        Return 0
-    End Function
-
     Private Function GetProductValuesAsArray(product As Product) As Object()
         Dim type = product.GetType()
         Dim propertiesInfo = type.GetProperties()
@@ -201,13 +191,4 @@ Public Class MySpreadsheetTest
 
         Return array
     End Function
-
-    Private Function GetCustomObjectPropertiesValuesAsArray(customObject As Object)
-        Dim type = GetType(Object)
-        Dim array As Object() = New Object(10) {}
-
-
-        Return 0
-    End Function
-
 End Class
