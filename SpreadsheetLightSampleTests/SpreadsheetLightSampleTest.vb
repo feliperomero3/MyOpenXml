@@ -38,8 +38,12 @@ Public Class SpreadsheetLightSampleTest
         Dim filePath = "c:\Users\Public\Documents\SalesOrderDetailTableToExcelTest.xlsx"
         Dim dataTable = New DataTable("SalesOrderDetail")
 
-        Dim type = GetType(Product)
-        Dim propertiesInfo = type.GetProperties()
+        Dim type = GetType(SalesOrderDetail)
+        Dim propertiesInfo = type.GetProperties().
+            Where(Function(x) Not x.PropertyType.IsClass _
+                              Or x.PropertyType.IsClass _
+                              AndAlso x.PropertyType = GetType(String)).
+            ToArray()
 
         For Each propertyInfo In propertiesInfo
             dataTable.Columns.Add(propertyInfo.Name)
@@ -48,7 +52,8 @@ Public Class SpreadsheetLightSampleTest
         Dim productAsArray As Object() = Nothing
 
         Using db As New AdventureWorks2014()
-            Dim result = db.SalesOrderDetail.ToList()
+            Dim result = db.SalesOrderDetail.Include("SalesOrderHeader").ToList()
+            'Dim result = db.SalesOrderDetail.ToList()
             For Each s As SalesOrderDetail In result
                 productAsArray = GetSalesOrderDetailsValuesAsArray(s)
                 dataTable.Rows.Add(productAsArray)
@@ -72,7 +77,11 @@ Public Class SpreadsheetLightSampleTest
 
     Private Function GetSalesOrderDetailsValuesAsArray(order As SalesOrderDetail) As Object()
         Dim type = order.GetType()
-        Dim propertiesInfo = type.GetProperties()
+        Dim propertiesInfo = type.GetProperties().
+            Where(Function(x) Not x.PropertyType.IsClass _
+                              Or x.PropertyType.IsClass _
+                              AndAlso x.PropertyType = GetType(String)).
+            ToArray()
         Dim array As Object() = New Object(propertiesInfo.GetUpperBound(0)) {}
 
         For index = 0 To array.GetUpperBound(0)
